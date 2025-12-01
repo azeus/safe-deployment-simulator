@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'regional-services'
+    static_configs:
+      - targets:
+        - 'region-us-west:8080'
+        - 'region-us-east:8080'
+        - 'region-eu-west:8080'
+        - 'region-ap-south:8080'
