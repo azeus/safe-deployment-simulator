@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  region-us-west:
+    build: ./service
+    container_name: region-us-west
+    environment:
+      - REGION=us-west
+      - VERSION=v1
+    ports:
+      - "8081:8080"
+
+  region-us-east:
+    build: ./service
+    container_name: region-us-east
+    environment:
+      - REGION=us-east
+      - VERSION=v1
+    ports:
+      - "8082:8080"
+
+  region-eu-west:
+    build: ./service
+    container_name: region-eu-west
+    environment:
+      - REGION=eu-west
+      - VERSION=v1
+    ports:
+      - "8083:8080"
+
+  region-ap-south:
+    build: ./service
+    container_name: region-ap-south
+    environment:
+      - REGION=ap-south
+      - VERSION=v1
+    ports:
+      - "8084:8080"
