@@ -11,8 +11,7 @@
   "panels": [
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -49,7 +48,8 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "none",
+          "displayName": "${__field.labels.region}"
         },
         "overrides": []
       },
@@ -72,39 +72,38 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "value_and_name"
       },
       "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "prometheus"
           },
           "expr": "service_up",
-          "legendFormat": "{{region}}",
-          "refId": "A"
+          "refId": "A",
+          "legendFormat": "{{region}}"
         }
       ],
-      "title": "Service Health",
+      "title": "Regional Service Health",
       "type": "stat"
     }
   ],
   "refresh": "5s",
   "schemaVersion": 38,
   "style": "dark",
-  "tags": [],
+  "tags": ["deployment", "health"],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Service Health",
-  "uid": "service-health",
+  "title": "Multi-Region Deployment Dashboard",
+  "uid": "multi-region-deployment",
   "version": 1,
   "weekStart": ""
 }

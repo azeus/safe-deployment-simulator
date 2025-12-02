@@ -6,36 +6,48 @@ services:
     container_name: region-us-west
     environment:
       - REGION=us-west
-      - VERSION=v1
+      - VERSION=${VERSION:-v1}
+      - FAILURE_RATE=${FAILURE_RATE:-0.0}
     ports:
       - "8081:8080"
+    networks:
+      - deploy-net
 
   region-us-east:
     build: ./service
     container_name: region-us-east
     environment:
       - REGION=us-east
-      - VERSION=v1
+      - VERSION=${VERSION:-v1}
+      - FAILURE_RATE=${FAILURE_RATE:-0.0}
     ports:
       - "8082:8080"
+    networks:
+      - deploy-net
 
   region-eu-west:
     build: ./service
     container_name: region-eu-west
     environment:
       - REGION=eu-west
-      - VERSION=v1
+      - VERSION=${VERSION:-v1}
+      - FAILURE_RATE=${FAILURE_RATE:-0.0}
     ports:
       - "8083:8080"
+    networks:
+      - deploy-net
 
   region-ap-south:
     build: ./service
     container_name: region-ap-south
     environment:
       - REGION=ap-south
-      - VERSION=v1
+      - VERSION=${VERSION:-v1}
+      - FAILURE_RATE=${FAILURE_RATE:-0.0}
     ports:
       - "8084:8080"
+    networks:
+      - deploy-net
 
   prometheus:
     image: prom/prometheus:v2.48.0
@@ -46,6 +58,8 @@ services:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - deploy-net
 
   grafana:
     image: grafana/grafana:10.2.2
@@ -53,9 +67,17 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=oracle
+      - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_AUTH_ANONYMOUS_ENABLED=true
     volumes:
       - ./monitoring/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
       - ./monitoring/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
       - ./monitoring/simple-dashboard.json:/var/lib/grafana/dashboards/simple-dashboard.json
+    networks:
+      - deploy-net
+    depends_on:
+      - prometheus
+
+networks:
+  deploy-net:
+    driver: bridge
