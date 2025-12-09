@@ -29,7 +29,7 @@ class Deployer:
         self.version = version
         self.failure_rate = failure_rate
         self.deployed_regions = []
-        self.current_version = 'v1'  # Track for rollback
+        self.current_version = self._detect_current_version()  # ← Changed this
         self.regions = [
             'region-us-west',
             'region-us-east',
@@ -42,6 +42,18 @@ class Deployer:
             'region-eu-west': 8083,
             'region-ap-south': 8084
         }
+
+    def _detect_current_version(self):
+        """Detect what version is currently deployed"""
+        try:
+            response = requests.get('http://localhost:8081/', timeout=5)
+            data = response.json()
+            current = data.get('version', 'v1')
+            print(f"{Colors.BLUE}Detected current version: {current}{Colors.END}")
+            return current
+        except Exception as e:
+            print(f"{Colors.YELLOW}Could not detect current version, assuming v1{Colors.END}")
+            return 'v1'
 
     def health_check(self, region, retries=3):
         """Check health with retries"""
